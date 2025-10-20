@@ -13,6 +13,10 @@ if len(Frontend_Domain) > 0:
 
 CORS(app, origins=cors_origins)
 
+@app.route('/')
+def health_check():
+    return jsonify({"status": "ok", "message": "AutoTasker Backend is running"})
+
 @app.route('/api/sendInstruction', methods=['POST'])
 def send_instruction():
     try:
@@ -25,4 +29,5 @@ def send_instruction():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
