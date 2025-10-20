@@ -1,20 +1,29 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from handleInstruction import exceute_instructions as execute_instructions
-from aiInterpreter import aiInterpreter
+from handleInstruction import execute_instructions
+from aiInterpreter import interpret_instruction
+import os
 
 app = Flask(__name__)
-cors_origins = ["http://localhost:5173/"]
+Frontend_Domain = os.getenv("MYDOMAIN") or " "
 
-CORS(app,origins=cors_origins)
+cors_origins = ["http://localhost:5173"]
 
-@app.route('/api/sendInstruction',method=['POST'])
+if len(Frontend_Domain) > 0:
+    cors_origins.append(Frontend_Domain)
+
+CORS(app, origins=cors_origins)
+
+@app.route('/api/sendInstruction', methods=['POST'])
 def send_instruction():
     try:
-        data = request.get_json()
-        instructions = aiInterpreter(data.get('instruction'))
-        execute_instructions(instructions)
-
-        return jsonify
+        data = request.json
+        search_type = data.get('send_type')
+        result = execute_instructions(search_type)
+        return jsonify({"success": True, "result": result})
     except Exception as e:
-        return jsonify({"error":str(e)}),401
+        print(f"Error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(port=5000)
