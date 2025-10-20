@@ -109,7 +109,7 @@ def execute_instructions(search_type):
         price = task.page_locate_price()
         url = task.url
         task.close()
-        return {"success": True, "result": "Form filled successfully","price": price,"url": task.url}
+        return {"success": True, "result": {"price": price, "url": url}}
     except(Exception,TimeoutError) as e:
         print("An error occurred", e)
 

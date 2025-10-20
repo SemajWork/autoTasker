@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from handleInstruction import execute_instructions
-from aiInterpreter import interpret_instruction
 import os
 
 app = Flask(__name__)
