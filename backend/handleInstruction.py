@@ -12,7 +12,7 @@ class Task:
         self.url = None
         try:
             self.playwright = sync_playwright().start()
-            self.browser = self.playwright.chromium.launch(headless=False, slow_mo=5000)
+            self.browser = self.playwright.chromium.launch(headless=True, slow_mo=5000)
             self.page = self.browser.new_page()
         except(Exception, TimeoutError) as e:
             print("An error occurred", e)
